@@ -34,7 +34,7 @@ export const io  = new Server(server,{
   //Emit online users to all connected users.
   io.emit('getOnlineUser',Object.keys(userSocketMap))
 
-  socket.disconnect('disconnect', ()=>{
+  socket.on('disconnect', ()=>{
     console.log('disconnect',userId)
     delete userSocketMap[userId];
     io.emit('getOnlineUser', userSocketMap)
@@ -42,7 +42,7 @@ export const io  = new Server(server,{
  })
               
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
 
 app.get('/test',(req,res)=>{
     res.send('hello from test')

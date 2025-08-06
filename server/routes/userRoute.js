@@ -1,5 +1,4 @@
 import express from 'express'
-// import { userRouter } from 'express'
 import { checkAuth, Login, signup, updateProfile } from '../controllers/userController.js';
 import { protectRoute } from '../middleware/auth.js';
 
