@@ -6,16 +6,20 @@ import { io, userSocketMap } from "../server.js";
 export const getUsersForSidebar = async(req,res)=>{
 
     try {
-        const userId = req.body;
-        const filteredUsers = await User.find({_id : {$ne: userId}}).select("-password");
+        const userId = req.user._id;
+        const filteredUsers = await User.find({_id : {$ne: userId}}).select("-password");       
          
         //Count all the unread messages
-        const unseenMesssages = {};
-        const promises  = filteredUsers.map(async(user)=>{
-            const message = await Message.find({senderId: user._id, recieverId: userId, seen: false})
-
+        const unseenMessages = {};
+        const promises  = filteredUsers.map(async(user)=>{           
+            const message = await Message.find({
+                senderId: user._id, 
+                recieverId: userId, 
+                seen: false
+            })
+    
             if(message.length>0){
-                unseenMesssages[user._id] = message.length;
+                unseenMessages[user._id] = message.length;
     
             }
         })
@@ -25,7 +29,7 @@ export const getUsersForSidebar = async(req,res)=>{
         res.json({
             success :true,
             users: filteredUsers,
-            unseenMesssages
+            unseenMessages
         })
         
     } catch (error) {
@@ -42,7 +46,7 @@ export const getUsersForSidebar = async(req,res)=>{
 export const getMessages = async(req,res)=>{
     try {
         const {id : selectedUserId} = req.params;
-        const myId = res.user._id;
+        const myId = req.user._id;
 
         const message = await Message.find({
             $or: [
@@ -52,7 +56,7 @@ export const getMessages = async(req,res)=>{
             ]
         })
 
-        await Message.updateMany({senderId: myId, recieverId: selectedUser}, {seen: true})
+        await Message.updateMany({senderId: selectedUserId, recieverId: myId}, {seen: true});
 
         res.json({
             success:true,
@@ -72,6 +76,7 @@ export const getMessages = async(req,res)=>{
 // mark message as seen using id
 
 export const markedMessageAsSeen = async(req,res)=>{
+    
     try {
         const{ id } = req.params;
         await Message.findByIdAndUpdate(id, {seen: true})
@@ -91,8 +96,9 @@ export const markedMessageAsSeen = async(req,res)=>{
 // Send message to user
 export const sendMessage = async(req,res)=>{
     const {text, image}  = req.body;
+    
     try {
-        const {id :recieverId }= req.prams;
+        const {id :recieverId }= req.params;
         const senderId = req.user._id; 
         
         let imageUrl;
@@ -107,9 +113,11 @@ export const sendMessage = async(req,res)=>{
             text,
             image:imageUrl
         })
-
+        // console.log(newMessage);
+        
         // Emit the new message to the reciever's socket
         const recieverSocketId = userSocketMap[recieverId]  
+        
         
         if(recieverSocketId){
             io.to(recieverSocketId).emit('newMessage',newMessage)

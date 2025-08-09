@@ -27,7 +27,6 @@ export const signup = async(req,res)=>{
 
      
 }catch(error){
-    console.log(error.message)
     res.json({success : false,  message:"Not able to onboard you mate!"})
 
 }

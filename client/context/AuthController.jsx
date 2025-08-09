@@ -94,7 +94,6 @@ export const AuthProvider = ({children})=>{
 
     // Socket function to handle socket connection and online users updates
     const connectSocket  = (userData)=>{
-        // console.log('hello from socket ', userData)
         if(!userData && socket?.connected) return;
         // create socket connection
         const newSocket = io(backendUrl,{

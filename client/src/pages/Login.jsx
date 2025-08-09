@@ -14,10 +14,7 @@ export const Login = ()=>{
     const { login } = useContext(AuthContext)
 
 
-    const handleSubmit = (e)=>{
-        console.log('hello')
-        console.log(isDataSubmitted);
-        
+    const handleSubmit = (e)=>{      
         e.preventDefault()
         if(currState === 'Signup' && !isDataSubmitted){
             setIsDataSubmitted(true)
@@ -26,7 +23,6 @@ export const Login = ()=>{
 
         login(currState === 'Signup' ? 'signup': 'login', { fullName,email,password,bio })
     }
-    console.log(isDataSubmitted)
     return <div className="min-h-screen  flex max-sm: flex-col items-center justify-center gap-8 text-white">
 
 
@@ -46,12 +42,12 @@ export const Login = ()=>{
          {currState==='Signup' && isDataSubmitted && (
             <textarea onChange={(e)=>{setBio(e.target.value)}} rows={4} className="p-2 border border-gray-600 rounded-md" value={bio} placeholder="Bio..." required></textarea>
          )}
-        <button type="submit" className="py-2 px-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600 rounded-md text-sm font-light cursor-pointer">{currState === 'Signup'? 'SIGNUP': 'LOGIN'}</button>
+        <button type="submit" className="py-2 px-20 bg-black tracking-wider hover:text-neutral-400 transition duration-200 rounded-md text-sm font-light cursor-pointer ">{currState === 'Signup'? 'SIGNUP': 'LOGIN'}</button>
         <div className="flex gap-2">
         <input type="checkbox"/>
         <p className="text-sm text-gray-400">Agree to the terms of use & privacy policy</p>
         </div>
-        {currState!=='Signup'? <p className="text-gray-400 font-medium">Don't have an account? <span onClick={()=>{setCurrState('Signup')}} className="text-gray-800 hover:underline cursor-pointer">Singup</span></p>: <p className="text-gray-400 font-medium">Already have an account? <span onClick={()=>{setCurrState('Login'); setIsDataSubmitted(false)}} className="text-gray-800 hover:underline cursor-pointer">Login here</span></p> }
+        {currState!=='Signup'? <p className="text-gray-400 font-medium">Don't have an account? <span onClick={()=>{setCurrState('Signup')}} className="text-sky-600 hover:underline cursor-pointer">Singup</span></p>: <p className="text-gray-400 font-medium">Already have an account? <span onClick={()=>{setCurrState('Login'); setIsDataSubmitted(false)}} className="text-sky-600 hover:underline cursor-pointer">Login here</span></p> }
         </form>
         
        
