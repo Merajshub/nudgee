@@ -9,6 +9,7 @@ import { AuthContext } from "../context/AuthController"
 
 function App() {
   const { authUser } = useContext(AuthContext)
+  console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
   
   return <div className="absolute h-screen w-screen [background:radial-gradient(100%_125%_at_50%_120%,#000_40%,#63e_90%,#f0f_100%)] text-neutral-200">
       <Toaster/>
