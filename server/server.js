@@ -53,6 +53,11 @@ app.get('/test',(req,res)=>{
 app.use('/api/auth',userRouter)
 app.use('/api/messages',messageRouter)
 
-server.listen(process.env.PORT,()=>{
+if(process.env.NODE_ENV !== 'production'){
+    server.listen(process.env.PORT,()=>{
     console.log(`server is runnig on ${process.env.PORT}...`)
-})
+})   
+}
+
+export default server;
+
