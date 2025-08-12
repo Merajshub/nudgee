@@ -19,6 +19,7 @@ export const AuthProvider = ({children})=>{
     const [authUser, setAuthUser] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
     const [socket , setSocket] = useState(null)
+    const [loading,setLoading] = useState(false)
 
     
 
@@ -39,9 +40,11 @@ export const AuthProvider = ({children})=>{
  // for login or signUp
     const login = async(state, credentials)=>{
         try {
+            setLoading(true)
             const {data}  = await axios.post(`/api/auth/${state}`,credentials)
             
             if(data.success){
+                setLoading(false)
                 
                 setAuthUser(data.userData);
                 
@@ -53,9 +56,11 @@ export const AuthProvider = ({children})=>{
                 toast.success(data.message);               
             }else{
                 toast.error(data.message)
+                setLoading(true)
             }
         } catch (error) {
             toast.error(error.message)
+            setLoading(false)
         }
 
     }
@@ -76,15 +81,18 @@ export const AuthProvider = ({children})=>{
     const updateProfile = async(body)=> { 
         
         try {
+            setLoading(true)
             const { data } = await axios.put('/api/auth/update-profile', body)
 
             if(data.success){
-                toast.success('from data sucees')
+                setLoading(false)
+                toast.success('from data success')
                 setAuthUser(data.user)                          
                 toast.success('Profile Updated Successfully')
         }
         } catch (error) {
             toast.error(error.message)
+            setLoading(false)
             
         }
 
@@ -129,7 +137,8 @@ export const AuthProvider = ({children})=>{
         login,
         logout,
         updateProfile,
-        axios
+        axios,
+        loading
     }
 
     return (

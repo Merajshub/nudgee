@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import assets from "../assets/assets"
 import { AuthContext } from "../../context/AuthController"
+import Loader from "../components/Loader"
 
 export const Login = ()=>{
     const[currState,setCurrState] = useState('Signup')
@@ -11,7 +12,7 @@ export const Login = ()=>{
     const [isDataSubmitted,setIsDataSubmitted] = useState(false)
 
 
-    const { login } = useContext(AuthContext)
+    const { login , loading } = useContext(AuthContext)
 
 
     const handleSubmit = (e)=>{      
@@ -42,12 +43,12 @@ export const Login = ()=>{
          {currState==='Signup' && isDataSubmitted && (
             <textarea onChange={(e)=>{setBio(e.target.value)}} rows={4} className="p-2 border border-gray-600 rounded-md" value={bio} placeholder="Bio..." required></textarea>
          )}
-        <button type="submit" className="py-2 px-20 bg-black tracking-wider hover:text-neutral-400 transition duration-200 rounded-md text-sm font-light cursor-pointer ">{currState === 'Signup'? 'SIGNUP': 'LOGIN'}</button>
+        <button type="submit" className="py-2 px-20 bg-indigo-800  text-neutral-300 tracking-wider hover:text-white transition duration-200 rounded-md text-sm font-medium cursor-pointer flex items-center justify-center ">{loading ?<Loader loading={loading}/> : currState === 'Signup'? 'SIGNUP': 'LOGIN'}</button>
         <div className="flex gap-2">
         <input type="checkbox"/>
         <p className="text-sm text-gray-400">Agree to the terms of use & privacy policy</p>
         </div>
-        {currState!=='Signup'? <p className="text-gray-400 font-medium">Don't have an account? <span onClick={()=>{setCurrState('Signup')}} className="text-sky-600 hover:underline cursor-pointer">Singup</span></p>: <p className="text-gray-400 font-medium">Already have an account? <span onClick={()=>{setCurrState('Login'); setIsDataSubmitted(false)}} className="text-sky-600 hover:underline cursor-pointer">Login here</span></p> }
+        {currState!=='Signup'? <p className="text-gray-400 font-medium">Don't have an account? <span onClick={()=>{setCurrState('Signup')}} className="text-sky-600 hover:underline cursor-pointer">Singup</span></p>: <p className="text-gray-400 font-medium">Already have an account? <span onClick={()=>{setCurrState('Login'); setIsDataSubmitted(false)}} className="text-indigo-800 hover:underline cursor-pointer">Login here</span></p> }
         </form>
         
        

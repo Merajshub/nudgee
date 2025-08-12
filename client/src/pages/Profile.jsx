@@ -2,15 +2,14 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import assets from "../assets/assets"
 import { AuthContext } from "../../context/AuthController"
+import Loader from "../components/Loader"
 
 export const Profile = ()=>{
-    const {authUser,updateProfile} = useContext(AuthContext) 
+    const {authUser,updateProfile,loading} = useContext(AuthContext) 
     const[selectedImage,setSelectedImage] = useState(null)   
     const navigate = useNavigate()
     const [name, setName] = useState(authUser.fullName);
     const [bio, setBio] = useState(authUser.bio);
-
-    // console.log(authUser);
 
 const handleSubmit = async(e)=>{
     
@@ -43,7 +42,7 @@ const handleSubmit = async(e)=>{
                 </label>
                 <input type="text" placeholder="Name" required className="border p-2 border-gray-500 rounded-md focus:outline-none" value={name} onChange={(e)=>{setName(e.target.value)} }/>
                 <textarea onChange={(e)=>{setBio(e.target.value)} } value={bio} className="p-2 border border-gray-500 rounded-md focus:outline-none" required rows={4}>{bio}</textarea>
-                <button type="submit" className="text-lg py-2 px-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600 rounded-md cursor-pointer">Save</button>
+                <button type="submit" className="text-lg text-neutral-300 py-2 px-20 bg-indigo-800 hover:bg-indigo-700 hover:text-white transition  duration-300 rounded-md cursor-pointer flex items-center justify-center">{loading ? <Loader loading={loading}/> : 'Save'}</button>
             </form>
         </div>
     
